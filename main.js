@@ -28,14 +28,18 @@ var shachikuX = 0;
 var shachikuSpeed = 0;
 
 function update(timestamp) {
+    // 時差取得
     var delta = 0;
     if(lastTimestamp != null) {
         delta = (timestamp - lastTimestamp) / 1000;
     }
     lastTimestamp = timestamp;
 
+    // キャラクタ座標計算
+    actionController();
     shachikuX += shachikuSpeed * delta;
 
+    // 壁判定
     if(shachikuX > 700) {
         shachikuX = 700;
     }else if(shachikuX < 0) {
@@ -95,43 +99,29 @@ Asset._loadImage = function(asset, onLoad) {
 
 // ゲームプレイ用ロジック
 
+var key_buff = new Array(256);
 var KEY_CODE_W = 87;
 var KEY_CODE_A = 65;
 var KEY_CODE_S = 83;
 var KEY_CODE_D = 68;
 
-/* 必要: キー押しっぱなし判定対応 */
-
 function keyDownHandler(e) {
-    switch(e.keyCode) {
-        case KEY_CODE_W:
-            break;
-        case KEY_CODE_A:
-            shachikuSpeed = -200;
-            break;
-        case KEY_CODE_S:
-            break;
-        case KEY_CODE_D:
-            shachikuSpeed = 200;
-            break;
-        default:
-            break;
-    }
+    key_buff[e.keyCode] = true;
 }
 
 function keyUpHandler(e) {
-    switch(e.keyCode) {
-        case KEY_CODE_W:
-            break;
-        case KEY_CODE_A:
-            shachikuSpeed = 0;
-            break;
-        case KEY_CODE_S:
-            break;
-        case KEY_CODE_D:
-            shachikuSpeed = 0;
-            break;
-        default:
-            break;
+    key_buff[e.keyCode] = false;
+}
+
+function actionController() {
+    if(key_buff[KEY_CODE_A] && !key_buff[KEY_CODE_D]) {
+        shachikuSpeed = -300;
+        return;
     }
+    if(key_buff[KEY_CODE_D] && !key_buff[KEY_CODE_A]) {
+        shachikuSpeed = 300;
+        return;
+    }
+
+    shachikuSpeed = 0;
 }
