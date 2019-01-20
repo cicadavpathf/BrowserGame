@@ -36,7 +36,7 @@ function update(timestamp) {
     lastTimestamp = timestamp;
 
     // キャラクタ座標計算
-    actionController();
+    actionKeeper();
     shachikuX += shachikuSpeed * delta;
 
     // 壁判定
@@ -48,6 +48,7 @@ function update(timestamp) {
 
     requestAnimationFrame(update);
 
+    // 描画
     render();
 }
 
@@ -97,31 +98,50 @@ Asset._loadImage = function(asset, onLoad) {
 };
 
 
-// ゲームプレイ用ロジック
+// ゲームロジック
 
-var key_buff = new Array(256);
+var key_buff = new Array(256);  // キー押下状態の維持用
 var KEY_CODE_W = 87;
 var KEY_CODE_A = 65;
 var KEY_CODE_S = 83;
 var KEY_CODE_D = 68;
 
+// キー押下時のアクション
 function keyDownHandler(e) {
+    // キー押下状態設定(true)
     key_buff[e.keyCode] = true;
-}
-
-function keyUpHandler(e) {
-    key_buff[e.keyCode] = false;
-}
-
-function actionController() {
-    if(key_buff[KEY_CODE_A] && !key_buff[KEY_CODE_D]) {
+    // 左方向の初速を設定
+    if(e.keyCode === KEY_CODE_A) {
         shachikuSpeed = -300;
         return;
     }
-    if(key_buff[KEY_CODE_D] && !key_buff[KEY_CODE_A]) {
+    // 右方向の初速を設定
+    if(e.keyCode === KEY_CODE_D) {
         shachikuSpeed = 300;
         return;
     }
+}
 
+function keyUpHandler(e) {
+    // キー解放状態設定(false)
+    key_buff[e.keyCode] = false;
+}
+
+// キー押下状態によるアクションの維持、制御
+function actionKeeper() {
+    // 左右同時押しは反映させない
+    if(key_buff[KEY_CODE_A] && key_buff[KEY_CODE_D]) {
+        return;
+    }
+    if(key_buff[KEY_CODE_A]) {
+        shachikuSpeed = -300;
+        return;
+    }
+    if(key_buff[KEY_CODE_D]) {
+        shachikuSpeed = 300;
+        return;
+    }
+    
+    // 条件に当てはまらなかった場合、アクションを止める
     shachikuSpeed = 0;
 }
