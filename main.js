@@ -24,8 +24,15 @@ function init() {
 }
 
 var lastTimestamp = null;
+var gravity = 9.8;
+var shachikuW = 100;
+var shachikuH = 140;
 var shachikuX = 0;
-var shachikuSpeed = 0;
+var shachikuY = SCREEN_HEIGHT - shachikuH;
+var shachikuXSpeed = 0;
+var shachikuYSpeed = 0;
+var jumpTime = 0;
+var jumping = false;
 
 function update(timestamp) {
     // 時差取得
@@ -37,13 +44,22 @@ function update(timestamp) {
 
     // キャラクタ座標計算
     actionKeeper();
-    shachikuX += shachikuSpeed * delta;
+    if(jumping) {
+        jumpTime += delta * 16;
+    }
+    shachikuX = shachikuX + shachikuXSpeed * delta;
+    shachikuY = (0.5 * gravity * jumpTime * jumpTime - shachikuYSpeed * jumpTime) + (canvas.height - shachikuH);
 
-    // 壁判定
-    if(shachikuX > 700) {
-        shachikuX = 700;
+    // 当たり判定
+    if(shachikuX > canvas.width - shachikuW) {
+        shachikuX = canvas.width - shachikuW;
     }else if(shachikuX < 0) {
         shachikuX = 0;
+    }else if(shachikuY > canvas.height - shachikuH) {
+        shachikuY = canvas.height - shachikuH;
+        shachikuYSpeed = 0;
+        jumpTime = 0;
+        jumping = false;
     }
 
     requestAnimationFrame(update);
@@ -56,7 +72,7 @@ function render() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     ctx.drawImage(Asset.images['back'], 0, 0);
-    ctx.drawImage(Asset.images['shachiku'], shachikuX, 350);
+    ctx.drawImage(Asset.images['shachiku'], shachikuX, shachikuY);
 }
 
 
@@ -105,43 +121,49 @@ var KEY_CODE_W = 87;
 var KEY_CODE_A = 65;
 var KEY_CODE_S = 83;
 var KEY_CODE_D = 68;
+var KEY_CODE_SPACE = 32;
 
-// キー押下時のアクション
+// キー押下時の処理
 function keyDownHandler(e) {
-    // キー押下状態設定(true)
+    // キー押下状態の設定(true)
     key_buff[e.keyCode] = true;
     // 左方向の初速を設定
-    if(e.keyCode === KEY_CODE_A) {
-        shachikuSpeed = -300;
-        return;
-    }
-    // 右方向の初速を設定
-    if(e.keyCode === KEY_CODE_D) {
-        shachikuSpeed = 300;
-        return;
+    switch(e.keyCode) {
+        case KEY_CODE_A:
+            shachikuXSpeed = -300;
+            break;
+        case KEY_CODE_D:
+            shachikuXSpeed = 300;
+            break;
+        case KEY_CODE_SPACE:
+            shachikuYSpeed = 42;
+            jumping = true;
+        default:
+            break;
     }
 }
 
+// キー解放時の処理
 function keyUpHandler(e) {
-    // キー解放状態設定(false)
+    // キー解放状態の設定(false)
     key_buff[e.keyCode] = false;
 }
 
-// キー押下状態によるアクションの維持、制御
+// キー押下状態によるアクションの維持
 function actionKeeper() {
     // 左右同時押しは反映させない
     if(key_buff[KEY_CODE_A] && key_buff[KEY_CODE_D]) {
         return;
     }
     if(key_buff[KEY_CODE_A]) {
-        shachikuSpeed = -300;
+        shachikuXSpeed = -300;
         return;
     }
     if(key_buff[KEY_CODE_D]) {
-        shachikuSpeed = 300;
+        shachikuXSpeed = 300;
         return;
     }
     
-    // 条件に当てはまらなかった場合、アクションを止める
-    shachikuSpeed = 0;
+    // キー解放状態の場合
+    shachikuXSpeed = 0;
 }
