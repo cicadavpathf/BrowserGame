@@ -17,7 +17,7 @@ Asset.loadAssets = function(onComplete) {
         }
     };
 
-    Asset.assets.forEach(function(asset) {
+    Asset.assets.forEach(asset => {
         switch (asset.type) {
             case 'image':
                 Asset._loadImage(asset, onLoad);
