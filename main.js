@@ -1,32 +1,34 @@
 window.addEventListener('load', init);
-window.addEventListener('keydown', keyDownHandler);
-window.addEventListener('keyup', keyUpHandler);
+
+let key_buff = new Array(256);
+
+// 登場オブジェクト(暫定グローバル)
+let objs = {};
 
 function init() {
-    let canvas = document.getElementById('maincanvas');
-    let ctx = canvas.getContext('2d');
+    window.addEventListener('keydown', Logic.keyDownHandler);
+    window.addEventListener('keyup', Logic.keyUpHandler);
 
+    let canvas = document.getElementById('maincanvas');
     canvas.width = SCREEN_WIDTH;
     canvas.height = SCREEN_HEIGHT;
 
-    Renderer.ctx = ctx;
+    Renderer.ctx = canvas.getContext('2d');
     Asset.assets = [
-        { type: 'image', name: NAME_BACK, src: 'assets/back.png' },
-        { type: 'image', name: NAME_SHACHIKU, src: 'assets/shachiku.png' }
+        { type: 'image', key: NAME_BACK, src: 'assets/back.png' },
+        { type: 'image', key: NAME_SHACHIKU, src: 'assets/shachiku.png' }
     ];
+
     Asset.loadAssets(function () {
+        objs[NAME_BACK] = new object(NAME_BACK, Asset.images[NAME_BACK], SCREEN_WIDTH, SCREEN_HEIGHT, 0, 0);
+        objs[NAME_SHACHIKU] = new player(NAME_SHACHIKU, Asset.images[NAME_SHACHIKU], 100, 140, 0, 460);
         requestAnimationFrame(update);
     });
 }
 
-let objs = {
-    [NAME_BACK]: new object(SCREEN_WIDTH, SCREEN_HEIGHT, 0, 0),
-    [NAME_SHACHIKU]: new character(100, 140, 0, 460)
-};
-
 function update(timestamp) {
     // game処理実行
-    gameProcess(timestamp);
+    Logic.gameProcess(timestamp);
 
     requestAnimationFrame(update);
 

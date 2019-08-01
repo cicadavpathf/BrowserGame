@@ -1,9 +1,10 @@
 // ゲームロジック
-let lastTimestamp;
-let key_buff = new Array(256);  // キー押下状態の維持用
+let Logic = {};
+
+Logic.lastTimestamp;
 
 // キー押下時の処理
-function keyDownHandler(e) {
+Logic.keyDownHandler = function(e) {
     // キー押下状態の設定(true)
     key_buff[e.keyCode] = true;
     // 左方向の初速を設定
@@ -23,13 +24,19 @@ function keyDownHandler(e) {
 }
 
 // キー解放時の処理
-function keyUpHandler(e) {
+Logic.keyUpHandler = function(e) {
     // キー解放状態の設定(false)
     key_buff[e.keyCode] = false;
 }
 
-// キー押下状態によるアクションの維持
-function actionKeeper() {
+// キー押下状態によるアクションの維持と調整
+Logic.actionKeeper = function() {
+    // ジャンプ維持
+    if(key_buff[KEY_CODE_SPACE]) {
+        objs[NAME_SHACHIKU].jumping = true;
+    }else if(!objs[NAME_SHACHIKU].jumping) {
+        objs[NAME_SHACHIKU].yAccel = 0;
+    }
     // 左右同時押しは反映させない
     if(key_buff[KEY_CODE_A] && key_buff[KEY_CODE_D]) {
         return;
@@ -42,36 +49,32 @@ function actionKeeper() {
         objs[NAME_SHACHIKU].xAccel = 300;
         return;
     }
-    
-    // キー解放状態の場合
     objs[NAME_SHACHIKU].xAccel = 0;
 }
 
-function gameProcess(timestamp) {
+Logic.gameProcess = function(timestamp) {
     // 時差取得
-    var delta = 0;
-    if(lastTimestamp != null) {
-        delta = (timestamp - lastTimestamp) / 1000;
+    let delta = 0;
+    if(Logic.lastTimestamp != null) {
+        delta = (timestamp - Logic.lastTimestamp) / 1000;
     }
-    lastTimestamp = timestamp;
+    Logic.lastTimestamp = timestamp;
+
+    let player = objs[NAME_SHACHIKU];
 
     // キャラクタ座標計算
-    actionKeeper();
-    if(objs[NAME_SHACHIKU].jumping) {
-        objs[NAME_SHACHIKU].jumpTime += delta * 16;
-    }
-    objs[NAME_SHACHIKU].x = objs[NAME_SHACHIKU].x + objs[NAME_SHACHIKU].xAccel * delta;
-    objs[NAME_SHACHIKU].y = (0.5 * GRAVITY * objs[NAME_SHACHIKU].jumpTime * objs[NAME_SHACHIKU].jumpTime - objs[NAME_SHACHIKU].yAccel * objs[NAME_SHACHIKU].jumpTime) + (SCREEN_HEIGHT - objs[NAME_SHACHIKU].h);
+    Logic.actionKeeper();
+
+    player.move(delta);
 
     // 当たり判定
-    if(objs[NAME_SHACHIKU].x > SCREEN_WIDTH - objs[NAME_SHACHIKU].w) {
-        objs[NAME_SHACHIKU].x = SCREEN_WIDTH - objs[NAME_SHACHIKU].w;
-    }else if(objs[NAME_SHACHIKU].x < 0) {
-        objs[NAME_SHACHIKU].x = 0;
-    }else if(objs[NAME_SHACHIKU].y > SCREEN_HEIGHT - objs[NAME_SHACHIKU].h) {
-        objs[NAME_SHACHIKU].y = SCREEN_HEIGHT - objs[NAME_SHACHIKU].h;
-        objs[NAME_SHACHIKU].yAccel = 0;
-        objs[NAME_SHACHIKU].jumpTime = 0;
-        objs[NAME_SHACHIKU].jumping = false;
+    if(player.x > SCREEN_WIDTH - player.w) {
+        player.x = SCREEN_WIDTH - player.w;
+    }else if(player.x < 0) {
+        player.x = 0;
+    }if(player.y > SCREEN_HEIGHT - player.h) {
+        player.y = SCREEN_HEIGHT - player.h;
+        player.jumpTime = 0;
+        player.jumping = false;
     }
 }

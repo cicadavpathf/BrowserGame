@@ -27,5 +27,5 @@ Asset._loadImage = function(asset, onLoad) {
     let image = new Image();
     image.src = asset.src;
     image.onload = onLoad;
-    Asset.images[asset.name] = image;
+    Asset.images[asset.key] = image;
 };
