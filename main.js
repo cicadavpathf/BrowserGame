@@ -2,22 +2,23 @@ window.addEventListener('load', init);
 window.addEventListener('keydown', keyDownHandler);
 window.addEventListener('keyup', keyUpHandler);
 
-let canvas;
-let ctx;
-
 function init() {
-    canvas = document.getElementById('maincanvas');
-    ctx = canvas.getContext('2d');
+    let canvas = document.getElementById('maincanvas');
+    let ctx = canvas.getContext('2d');
 
     canvas.width = SCREEN_WIDTH;
     canvas.height = SCREEN_HEIGHT;
 
+    Renderer.ctx = ctx;
+    Asset.assets = [
+        { type: 'image', name: NAME_BACK, src: 'assets/back.png' },
+        { type: 'image', name: NAME_SHACHIKU, src: 'assets/shachiku.png' }
+    ];
     Asset.loadAssets(function () {
         requestAnimationFrame(update);
     });
 }
 
-let lastTimestamp;
 let objs = {
     [NAME_BACK]: new object(SCREEN_WIDTH, SCREEN_HEIGHT, 0, 0),
     [NAME_SHACHIKU]: new character(100, 140, 0, 460)
@@ -30,5 +31,5 @@ function update(timestamp) {
     requestAnimationFrame(update);
 
     // 描画
-    render();
+    Renderer.render();
 }

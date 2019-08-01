@@ -1,4 +1,5 @@
 // ゲームロジック
+let lastTimestamp;
 let key_buff = new Array(256);  // キー押下状態の維持用
 
 // キー押下時の処理

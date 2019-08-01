@@ -1,9 +1,6 @@
 let Asset = {};
 
-Asset.assets = [
-    { type: 'image', name: NAME_BACK, src: 'assets/back.png' },
-    { type: 'image', name: NAME_SHACHIKU, src: 'assets/shachiku.png' }
-];
+Asset.assets = [];
 
 Asset.images = {};
 
