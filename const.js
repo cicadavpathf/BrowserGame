@@ -1,5 +1,6 @@
 const SCREEN_WIDTH = 800;
 const SCREEN_HEIGHT = 600;
+const KEY_CODE_ENTER = 13;
 const KEY_CODE_W = 87;
 const KEY_CODE_A = 65;
 const KEY_CODE_S = 83;

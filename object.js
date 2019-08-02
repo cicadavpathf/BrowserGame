@@ -53,8 +53,6 @@ class firework extends shape {
     }
 
     initialize() {
-        this.x = 400;
-        this.y = 600;
         this.count = 0;
         this.scale = 0;
         this.xAccel = -3 + random(6);
@@ -93,9 +91,14 @@ class firework extends shape {
                     ctx.fill();
                 }
             }
-            if (this.count > 30) {
-                this.initialize();
+            if (this.count > 80) {
+                this._afterDrawing();
             }
         }
     }
+
+    afterDrawing(func) {
+        this._afterDrawing = func;
+    }
+    _afterDrawing(){}
 }

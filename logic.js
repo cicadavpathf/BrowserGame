@@ -9,6 +9,13 @@ Logic.keyDownHandler = function(e) {
     key_buff[e.keyCode] = true;
     // 左方向の初速を設定
     switch(e.keyCode) {
+        case KEY_CODE_ENTER:
+            objs[NAME_FIREWORK + Logic.lastTimestamp] = new firework(NAME_FIREWORK + Logic.lastTimestamp, "", random(60) + 60,
+                objs[NAME_SHACHIKU].x, objs[NAME_SHACHIKU].y);
+            objs[NAME_FIREWORK + Logic.lastTimestamp].afterDrawing(() => {
+                return delete objs[NAME_FIREWORK + Logic.lastTimestamp];
+            });
+            break;
         case KEY_CODE_A:
             objs[NAME_SHACHIKU].xAccel = -300;
             break;
@@ -60,16 +67,15 @@ Logic.gameProcess = function(timestamp) {
     }
     Logic.lastTimestamp = timestamp;
 
-    let player = objs[NAME_SHACHIKU];
-    let firework = objs[NAME_FIREWORK];
-
-    // キャラクタ座標計算
     Logic.actionKeeper();
 
-    player.move(delta);
-    firework.move(delta);
+    // move
+    Object.keys(objs).forEach(key => {
+        objs[key].move(delta);
+    });
 
     // 当たり判定
+    let player = objs[NAME_SHACHIKU];
     if(player.x > SCREEN_WIDTH - player.w) {
         player.x = SCREEN_WIDTH - player.w;
     }else if(player.x < 0) {
