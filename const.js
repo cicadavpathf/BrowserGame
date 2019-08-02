@@ -8,3 +8,6 @@ const KEY_CODE_SPACE = 32;
 const GRAVITY = 9.8;
 const NAME_BACK = "back";
 const NAME_SHACHIKU = "shachiku";
+const NAME_FIREWORK = "firework";
+const firework_colors = ["rgba(255,0,0,1)", "rgba(255,255,0,1)", "rgba(255,255,255,1)", "rgba(255,0,255,1)",
+    "rgba(0,255,0,1)", "rgba(127,127,255,1)", "rgba(0,255,255,1)"];

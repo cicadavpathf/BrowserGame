@@ -22,6 +22,7 @@ function init() {
     Asset.loadAssets(function () {
         objs[NAME_BACK] = new object(NAME_BACK, Asset.images[NAME_BACK], SCREEN_WIDTH, SCREEN_HEIGHT, 0, 0);
         objs[NAME_SHACHIKU] = new player(NAME_SHACHIKU, Asset.images[NAME_SHACHIKU], 100, 140, 0, 460);
+        objs[NAME_FIREWORK] = new firework(NAME_FIREWORK, "", random(60) + 60, 400, 600);
         requestAnimationFrame(update);
     });
 }

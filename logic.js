@@ -61,11 +61,13 @@ Logic.gameProcess = function(timestamp) {
     Logic.lastTimestamp = timestamp;
 
     let player = objs[NAME_SHACHIKU];
+    let firework = objs[NAME_FIREWORK];
 
     // キャラクタ座標計算
     Logic.actionKeeper();
 
     player.move(delta);
+    firework.move(delta);
 
     // 当たり判定
     if(player.x > SCREEN_WIDTH - player.w) {
