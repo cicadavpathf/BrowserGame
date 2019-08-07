@@ -12,9 +12,6 @@ Logic.keyDownHandler = function(e) {
         case KEY_CODE_ENTER:
             objs[NAME_FIREWORK + Logic.lastTimestamp] = new firework(NAME_FIREWORK + Logic.lastTimestamp, "", random(60) + 60,
                 objs[NAME_SHACHIKU].x, objs[NAME_SHACHIKU].y);
-            objs[NAME_FIREWORK + Logic.lastTimestamp].afterDrawing(() => {
-                return delete objs[NAME_FIREWORK + Logic.lastTimestamp];
-            });
             break;
         case KEY_CODE_A:
             objs[NAME_SHACHIKU].xAccel = -300;

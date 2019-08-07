@@ -51,7 +51,6 @@ class firework extends shape {
         this.radius = radius;
         this.initialize();
     }
-
     initialize() {
         this.count = 0;
         this.scale = 0;
@@ -61,7 +60,6 @@ class firework extends shape {
             this.color = firework_colors[random(firework_colors.length)];
         }
     }
-
     move(delta) {
         this.x += this.xAccel;
         this.y += this.yAccel;
@@ -69,7 +67,6 @@ class firework extends shape {
         this.yAccel += 0.1;
         this.xAccel /= 1.01;
     }
-
     draw(ctx) {
         if (this.yAccel < -1) { // going up
             ctx.fillStyle = this.color;
@@ -92,13 +89,11 @@ class firework extends shape {
                 }
             }
             if (this.count > 80) {
-                this._afterDrawing();
+                this.destruct();
             }
         }
     }
-
-    afterDrawing(func) {
-        this._afterDrawing = func;
+    destruct() {
+        
     }
-    _afterDrawing(){}
 }
