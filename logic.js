@@ -10,8 +10,8 @@ Logic.keyDownHandler = function(e) {
     // 左方向の初速を設定
     switch(e.keyCode) {
         case KEY_CODE_ENTER:
-            objs[NAME_FIREWORK + Logic.lastTimestamp] = new firework(NAME_FIREWORK + Logic.lastTimestamp, "", random(60) + 60,
-                objs[NAME_SHACHIKU].x, objs[NAME_SHACHIKU].y);
+            objs[NAME_FIREWORKS].push(new firework("", random(60) + 60,
+                objs[NAME_SHACHIKU].x, objs[NAME_SHACHIKU].y));
             break;
         case KEY_CODE_A:
             objs[NAME_SHACHIKU].xAccel = -300;
