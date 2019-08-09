@@ -33,7 +33,7 @@ function update(timestamp) {
     Logic.gameProcess(timestamp);
 
     requestAnimationFrame(update);
-    console.log(objs[NAME_FIREWORKS].list.length);
+
     // 描画
     Renderer.render();
 }
