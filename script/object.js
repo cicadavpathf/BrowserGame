@@ -120,3 +120,23 @@ class firework extends shape {
         this.isDead = true;
     }
 }
+
+class target extends object {
+    constructor(key, image, w, h, x, y) {
+        super(key, image, w, h, x, y);
+        this.xAccel = 0;
+        this.yAccel = 0;
+        this.initialize();
+    }
+    initialize() {
+        this.xAccel = 50;
+    }
+    move(delta) {
+        this.x += this.xAccel * delta;
+    }
+    draw(ctx) {
+        //ctx.fillStyle = "black";
+        ctx.fillRect(this.x, this.y, this.w, this.h);
+        ctx.fill();
+    }
+}

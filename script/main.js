@@ -24,6 +24,9 @@ function init() {
         stage[NAME_BACK] = new object(NAME_BACK, Asset.images[NAME_BACK], SCREEN_WIDTH, SCREEN_HEIGHT, 0, 0);
         objs[NAME_SHACHIKU] = new player(NAME_SHACHIKU, Asset.images[NAME_SHACHIKU], 100, 140, 0, 460);
         objs[NAME_FIREWORKS] = new fireworks(NAME_FIREWORKS);
+
+        // 当たり判定テスト用ダミーターゲット
+        objs[NAME_TARGET] = new target(NAME_TARGET, null, 100, 100, 0, 300);
         requestAnimationFrame(update);
     });
 }
